@@ -6,8 +6,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+
 import s24.bookstore.domain.Book;
 import s24.bookstore.domain.BookRepository;
+import s24.bookstore.domain.Category;
+import s24.bookstore.domain.CategoryRepository;
 
 @SpringBootApplication
 public class BookstoreApplication {
@@ -18,18 +21,25 @@ public class BookstoreApplication {
 	}
 
 	@Bean
-	public CommandLineRunner studentDemo(BookRepository repository) {
+	public CommandLineRunner bookDemo(BookRepository brepository, CategoryRepository rcepository) {
 		return (args) -> {
 			log.info("save a couple of books");
-			repository.save(new Book("Crime and punishment", "Dostoyevsky", 1867, 328923, 2390, 77));
-			repository.save(new Book("The idiot", "Dostoyevsky", 1869, 238492, 2903, 99));
+
+			Category category1 = new Category("Action");
+			Category category2 = new Category("Fiction");
+			Category category3 = new Category("Mystery");
+
+			rcepository.save(category1);
+			rcepository.save(category2);
+			rcepository.save(category3);
+
+			brepository.save(new Book("Crime and punishment", "Dostoyevsky", 1867, 2390, 77,
+					category2));
+			brepository.save(
+					new Book("The idiot", "Dostoyevsky", 1869, 2903, 99, category1));
 
 			log.info("fetch all books");
-			for (Book book : repository.findAll()) {
-				log.info(book.toString());
-			}
-			log.info("haetaan kaikki Naamiot");
-			for (Book book : repository.findByTitle("Naamio")) {
+			for (Book book : brepository.findAll()) {
 				log.info(book.toString());
 			}
 
