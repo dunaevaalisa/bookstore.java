@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import s24.bookstore.domain.Book;
 import s24.bookstore.domain.Category;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import s24.bookstore.domain.BookRepository;
 import s24.bookstore.domain.CategoryRepository;;
@@ -30,6 +32,18 @@ public class BookController {
         List<Book> books = new ArrayList<>();
         model.addAttribute("books", bookRepository.findAll());
         return "booklist";
+    }
+
+    // RESTful service to get all books
+    @RequestMapping(value = "/books", method = RequestMethod.GET)
+    public @ResponseBody List<Book> bookListRest() {
+        return (List<Book>) bookRepository.findAll();
+    }
+
+    // RESTful service to get student by id
+    @RequestMapping(value = "/book/{id}", method = RequestMethod.GET)
+    public @ResponseBody Optional<Book> findStudentRest(@PathVariable("id") Long bookId) {
+        return bookRepository.findById(bookId);
     }
 
     @RequestMapping(value = "/add")
